@@ -279,6 +279,11 @@ QDKP2_BidM_RoundValue        	= true   	-- if true, QDKP will round the "value" 
 QDKP2_BidM_AutoRoll		= false  	-- If true, QDKP will do an internal roll if someone places a bid that needs a roll value to be calculated.if false, reject the bid asking to /roll first.
 QDKP2_BidM_MinBid            	= 5	-- Enter here the minimum bid allowed in your guild.
 QDKP2_BidM_MaxBid            	= 9999999  -- Enter here the maximum bid allowed in your guild (if any)
+QDKP2_BidM_MinIncrement      	= 0	-- Minimum amount a new bid must exceed the current top bid by. 0 = disabled.
+QDKP2_BidM_AntiSnipe         	= 0	-- Anti-snipe: if a bid arrives during the countdown, restart the countdown with this many ticks instead of just cancelling it. 0 = disabled (old behavior).
+QDKP2_BidM_AutoCount_Threshold	= 10	-- Idle auto-countdown: only arms when the top bid is ABOVE this many DKP.
+QDKP2_BidM_AutoCount_Idle    	= 15	-- Idle auto-countdown: seconds without a new bid before the countdown starts automatically (awarding the top bidder). 0 = disabled.
+QDKP2_QuickBid_Enabled       	= true	-- QuickBid: ALT+click an item in your bags instantly starts a bid on it. Officers only.
 
 -- These are the channels QDKP sends notifications to.
 -- Bid acknowledge or reject reason are always sent back on the same channel they are received.
@@ -589,7 +594,7 @@ QDKP2_CHECK_UPLOAD_DELAY = 2
 QDKP2_CHECK_TRIES = 3
 
 ------------------------ DEFAULTS ---------------------
-QDKP2_AutoBossEarn_Default 	= "on" 	-- Default state of AutoBossMod. Can be "on" or "off"
+QDKP2_AutoBossEarn_Default 	= "off" 	-- Default state of AutoBossMod. Can be "on" or "off"
 QDKP2_DetectBid_Default 	= "off"	-- Default state of Detect Bid System. Can be "on" or "off"
 QDKP2_UseFixedPrice_Default 	= "on"	-- Default state of Fixed Item Price. Can be "on" or "off"
 QDKP2GUI_Default_RaidBonus	= 10

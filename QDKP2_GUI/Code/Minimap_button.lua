@@ -1,4 +1,25 @@
-function QDKP2GUI_MiniBtn_Click(arg1, arg2)
+function QDKP2GUI_MiniBtn_Click(button)
+  if button == "RightButton" then
+    -- right-click: toggle the roster window on the Bid Manager list
+    if not QDKP2_ACTIVE then
+      QDKP2_Msg("Quick DKP is not fully initialized yet. Please wait 5 seconds and try again.","WARNING")
+      return
+    end
+    if not QDKP2_OfficerMode() then
+      QDKP2_Toggle_Main() --the Bid Manager is officer-only; fall back to the normal toggle
+      return
+    end
+    if QDKP2_Frame2:IsVisible() and QDKP2GUI_Roster.Sel == "bid" then
+      -- already open on the Bid Manager: close it, same as the left-click toggle
+      QDKP2_Frame2:Hide()
+      return
+    end
+    if not QDKP2_Frame2:IsVisible() then
+      QDKP2GUI_Roster:Show()
+    end
+    QDKP2GUI_Roster:ChangeList("bid")
+    return
+  end
   QDKP2_Toggle_Main()
 end
 
@@ -20,6 +41,7 @@ function QDKP2GUI_MiniBtn_LabelOn(arg1, arg2)
   GameTooltip:AddLine("DKP officer rights:")
   GameTooltip:AddLine(QDKP2_GetPermissions())     --officer notes
   GameTooltip:AddLine("CLICK: Show/Hide QDKP", .8, .8, .8, 1)
+  GameTooltip:AddLine("RIGHT-CLICK: Bid Manager", .8, .8, .8, 1)
   GameTooltip:AddLine("SHIFT+CLICK: Drag this button", .8, .8, .8, 1)
   GameTooltip:Show()
 end

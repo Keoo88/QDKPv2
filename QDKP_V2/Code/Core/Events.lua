@@ -153,7 +153,20 @@ function QDKP2_OnEvent(self, event, arg1, arg2, arg3, arg4, arg5, arg6, arg7)
 -- LOOT SNIFFER
   elseif (event == "CHAT_MSG_LOOT" ) then  --fired on a loot
     QDKP2_Debug(2,"Core","Loot detected: "..arg1)
-    local name, itemString=QDKP2libs.Deformat(arg1, LOOT_ITEM)
+    --try the "multiple" patterns first: the singular ones would swallow the "xN" suffix into the item string.
+    local name, itemString, lootQty
+    name, itemString, lootQty = QDKP2libs.Deformat(arg1, LOOT_ITEM_MULTIPLE)
+    if not itemString then
+      itemString, lootQty = QDKP2libs.Deformat(arg1, LOOT_ITEM_SELF_MULTIPLE)
+      if itemString then name=UnitName('player'); end
+    end
+    if not itemString then
+      itemString, lootQty = QDKP2libs.Deformat(arg1, LOOT_ITEM_PUSHED_SELF_MULTIPLE)
+      if itemString then name=UnitName('player'); end
+    end
+    if not itemString then
+      name, itemString = QDKP2libs.Deformat(arg1, LOOT_ITEM)
+    end
     if not itemString then
       itemString = QDKP2libs.Deformat(arg1, LOOT_ITEM_SELF)
       name=UnitName('player')
@@ -175,9 +188,12 @@ function QDKP2_OnEvent(self, event, arg1, arg2, arg3, arg4, arg5, arg6, arg7)
       QDKP2_Debug(1,"Core","Quitting OnLoot because i can't extract item from "..itemString)
       return
     end
-    itemString=string.gsub(itemString,"^|c%x+|H.+|h%[.*%]","")  --remove the itemLink
-    local _,_,itemQty=string.find(itemString,"([0-9]+)")       --the quantity should be the only number still there.
-    itemQty=tonumber(itemQty) or 1
+    local itemQty=tonumber(lootQty)
+    if not itemQty then
+      itemString=string.gsub(itemString,"^|c%x+|H.+|h%[.*%]","")  --remove the itemLink
+      local _,_,qty=string.find(itemString,"([0-9]+)")       --the quantity should be the only number still there.
+      itemQty=tonumber(qty) or 1
+    end
     QDKP2_Debug(3,"Core","Unpacked as "..item.." x"..tostring(itemQty).." looted by "..name)
     QDKP2_OnLoot(name, item, itemQty)
 

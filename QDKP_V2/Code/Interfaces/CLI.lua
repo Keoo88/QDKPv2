@@ -458,6 +458,25 @@ function QDKP2_CLI_ProcessCommand(text)
     return
 
 
+  elseif W1 == "backup" then
+    if not W2 or W2 == "new" or W2 == "make" then
+      QDKP2_Backup()
+    elseif W2 == "list" then
+      QDKP2_ListBackups()
+    else
+      QDKP2_CLI_ShowUsage("backup [new|list]")
+    end
+    return
+
+  elseif W1 == "restore" then
+    local index = tonumber(W2)
+    QDKP2_Restore(nil, index)
+    return
+
+  elseif W1 == "integrity" or W1 == "checkintegrity" then
+    QDKP2_CheckIntegrity()
+    return
+
   elseif not W1 or W1 == "" or W1 == "help" or W1 == "h" or W1 == "?" then
     QDKP2_CLI_Help()
     return
@@ -594,7 +613,7 @@ function QDKP2_CLI_ProcessCommand(text)
       end
       QDKP2_netSort(list)
       for i = 1, table.getn(list) do
-        if i > 10 then break; end
+        if i > 10 then break end
         local name = list[i]
         local DKP = QDKP2_GetNet(name)
         table.insert(output, QDKP2_GetName(name) .. ": " .. tostring(DKP) .. " DKP")
@@ -642,7 +661,7 @@ function QDKP2_CLI_ProcessCommand(text)
       end
       QDKP2_netSort(list)
       for i = 1, table.getn(list) do
-        if i > 10 then break; end
+        if i > 10 then break end
         local name = list[i]
         local DKP = QDKP2_GetNet(name)
         table.insert(output, QDKP2_GetName(name) .. ": " .. tostring(DKP) .. " DKP")

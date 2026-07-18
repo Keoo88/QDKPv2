@@ -191,7 +191,7 @@
     <HighlightTexture alphaMode="ADD" file="Interface\Minimap\UI-Minimap-ZoomButton-Highlight"/>
     <Scripts>
       <OnLoad>
-        this:RegisterForClicks("LeftButtonUp");
+        this:RegisterForClicks("LeftButtonUp", "RightButtonUp");
         this:RegisterForDrag("LeftButton");
         this:SetFrameLevel(this:GetFrameLevel()+1);
       </OnLoad>
@@ -202,7 +202,7 @@
         QDKP2GUI_MiniBtn_LabelOff()
       </OnLeave>
       <OnClick>
-        QDKP2GUI_MiniBtn_Click();
+        QDKP2GUI_MiniBtn_Click(arg1);
       </OnClick>
       <OnDragStart>
         QDKP2GUI_MiniBtn_DragOn()

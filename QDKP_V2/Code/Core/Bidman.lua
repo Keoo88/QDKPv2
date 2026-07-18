@@ -19,6 +19,23 @@
 
 
 
+-- Community patch: minimum bid increment & anti-snipe support.
+QDKP2_LOC_BidLessIncrement = QDKP2_LOC_BidLessIncrement or
+        (GetLocale() == "ruRU" and "Ставка должна превышать текущую максимальную минимум на $INC DKP."
+                or "Your bid must exceed the current top bid by at least $INC DKP.")
+
+local function QDKP2_BidM_GetTopBid(exceptPlayer)
+-- returns topValue, topBidder among current bids (optionally excluding a player)
+  local topValue, topBidder
+  for iplayer, ibid in pairs(QDKP2_BidM.LIST) do
+    if ibid.value and iplayer ~= exceptPlayer and (not topValue or ibid.value > topValue) then
+      topValue = ibid.value
+      topBidder = iplayer
+    end
+  end
+  return topValue, topBidder
+end
+
 --------------------- BID START/STOP --------------------------
 
 function QDKP2_BidM_StartBid(item)
@@ -290,9 +307,30 @@ function QDKP2_BidM_BidWatcher(txt,player,channel)
             end
           end
 
+          --minimum increment control: the new bid must beat the current top bid by at least QDKP2_BidM_MinIncrement.
+          if QDKP2_BidM_MinIncrement and QDKP2_BidM_MinIncrement>0 and newBet.value then
+            local topValue=QDKP2_BidM_GetTopBid(player)
+            if topValue and newBet.value < topValue + QDKP2_BidM_MinIncrement then
+              local mess=QDKP2_LOC_BidLessIncrement
+              mess=mess:gsub("$INC",tostring(QDKP2_BidM_MinIncrement))
+              QDKP2_BidM_SendMessage(player,"NOBID",channel,mess)
+              return false
+            end
+          end
+
           QDKP2_Debug(3,"BidM","Bid ok, adding to the list.")
           QDKP2_BidM.LIST[player]=newBet
-          if QDKP2_BidM_CountdownCount then QDKP2_BidM_CountdownCancel(); end--if i'm doing a countdown, cancel it
+          if QDKP2_BidM_CountdownCount then
+            --a bid arrived during the countdown.
+            if QDKP2_BidM_AntiSnipe and QDKP2_BidM_AntiSnipe>0 then
+              --anti-snipe: restart the countdown, awarding the current top bidder at its end (if a winner was pending).
+              local _,topBidder=QDKP2_BidM_GetTopBid()
+              local pendingWinner=QDKP2_BidM_CountdownWinner and topBidder or nil
+              QDKP2_BidM_Countdown(pendingWinner,QDKP2_BidM_AntiSnipe)
+            else
+              QDKP2_BidM_CountdownCancel() --old behavior: just cancel it
+            end
+          end
           QDKP2_BidM_SendMessage(player,"ACK",channel,QDKP2_LOC_BidAck)
           if QDKP2_BidM_LogBids and QDKP2_BidM.ITEM and #QDKP2_BidM.ITEM>0 then
             local mess=QDKP2_LOC_BidPlaceLog

@@ -15,6 +15,22 @@
 
 
 
+-- Locale-independent item type matching.
+-- LibBabble-Inventory misses some words (e.g. "Money"), so we keep explicit
+-- enUS + ruRU translations as a fallback for the LibBabble lookup.
+local QDKP2_TYPE_MONEY = {
+  ["Money"] = true,
+  ["Деньги"] = true,
+}
+local QDKP2_TYPE_TRADEGOODS = {
+  ["Trade Goods"] = true,
+  ["Хозяйственные товары"] = true,
+}
+local QDKP2_SUBTYPE_ENCHANTING = {
+  ["Enchanting"] = true,
+  ["Наложение чар"] = true,
+}
+
 -- Loot Handler
 function QDKP2_OnLoot(name, item, itemQty)
   if not QDKP2_ManagementMode() then return; end
@@ -34,8 +50,10 @@ function QDKP2_OnLoot(name, item, itemQty)
     QDKP2_Debug(1, "Core", "GetItemInfo failed for " .. item)
     return
   end
-  if (itemType == "Money" or QDKP2inventoryEnglish[itemType] == "Money") and not QDKP2_LogBadges then return; end -- Badges
-  if QDKP2inventoryEnglish[itemType] == "Trade Goods" and QDKP2inventoryEnglish[itemSubType] == "Enchanting" and not QDKP2_LogShards then
+  if (QDKP2_TYPE_MONEY[itemType] or QDKP2inventoryEnglish[itemType] == "Money") and not QDKP2_LogBadges then return; end -- Badges
+  if (QDKP2_TYPE_TRADEGOODS[itemType] or QDKP2inventoryEnglish[itemType] == "Trade Goods")
+          and (QDKP2_SUBTYPE_ENCHANTING[itemSubType] or QDKP2inventoryEnglish[itemSubType] == "Enchanting")
+          and not QDKP2_LogShards then
     return -- Disenchanted stuff
   end
 

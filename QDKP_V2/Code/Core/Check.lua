@@ -111,6 +111,35 @@ end
 --this is used to detect the update to the guild rooster and delay the real
 --check to give time to the changes to propagate in the local cache. (really needed?)
 
+function QDKP2_CheckIntegrity()
+-- Community patch: verifies the internal consistency of the DKP data:
+-- for every main, net must be equal to total - spent. Reports any mismatch.
+  local bad = 0
+  local checked = 0
+  for i=1, QDKP2_GetNumGuildMembers(true) do
+    local name = QDKP2_GetGuildRosterInfo(i)
+    if name and QDKP2_IsInGuild(name) and not QDKP2_IsAlt(name) then
+      checked = checked + 1
+      local net = QDKP2_GetNet(name)
+      local total = QDKP2_GetTotal(name)
+      local spent = QDKP2_GetSpent(name)
+      if net ~= (total - spent) then
+        bad = bad + 1
+        QDKP2_Msg(name..": net="..tostring(net).." but total-spent="..tostring(total - spent).." (total="..tostring(total)..", spent="..tostring(spent)..")","ERROR")
+        QDKP2log_Entry(name, "INTEGRITY: net does not match total-spent.", QDKP2LOG_CRITICAL)
+      end
+    end
+  end
+  if bad == 0 then
+    QDKP2_Msg(QDKP2_COLOR_GREEN.."Integrity check passed: "..checked.." players verified, no inconsistencies found.")
+  else
+    QDKP2_Msg(QDKP2_COLOR_RED.."Integrity check found "..bad.." inconsistent players out of "..checked..".","ERROR")
+    QDKP2_Events:Fire("DATA_UPDATED","log")
+  end
+  return bad
+end
+
+
 function QDKP2_StopCheck(doNotInform)
 
   if QDKP2_CheckInProgress then
