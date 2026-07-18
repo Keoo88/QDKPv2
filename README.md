@@ -138,8 +138,7 @@ Type `/qdkp` for the full command list. Commands added in this build:
 
 ### Compatibility
 
-- Built and tested on **WoW 3.3.5a (WotLK)**, Interface `30300`.
-- `Options.ini` is **not** compatible with the original QDKP2 addon.
+- Built and tested on **WoW 3.3.5a (WotLK)**.
 - Optional dependencies: AtlasLoot, DBM-Core, BigWigs.
 
 <a name="credits"></a>
@@ -262,8 +261,7 @@ Points) прямо в игре: ставки, учёт лута, начисле�
 
 ### Совместимость
 
-- Собрано и протестировано на **WoW 3.3.5a (WotLK)**, Interface `30300`.
-- `Options.ini` **не** совместим с оригинальным аддоном QDKP2.
+- Собрано и протестировано на **WoW 3.3.5a (WotLK)**.
 - Необязательные зависимости: AtlasLoot, DBM-Core, BigWigs.
 
 <a name="благодарности"></a>
