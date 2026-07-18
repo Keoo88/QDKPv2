@@ -1,9 +1,7 @@
-<p align="center">
-  <img src="assets/logo.png" alt="QDKPv2" width="90"><br><br>
-  <img src="https://img.shields.io/badge/QDKPv2-2.6.7-ff8800?style=for-the-badge&logo=appveyor">
-  <img src="https://img.shields.io/badge/WotLK-3.3.5a-blue?style=for-the-badge">
-  <img src="https://img.shields.io/badge/status-stable-brightgreen?style=for-the-badge">
-</p>
+<img width="1098" height="595" alt="bid-manager" src="https://github.com/user-attachments/assets/98601e35-d6b0-4810-9ce3-4f490b05a3b1" /><img width="759" height="595" alt="roster" src="https://github.com/user-attachments/assets/2b9b563d-6f85-4a07-9b48-fe865422d74a" />
+<img width="823" height="242" alt="raid-log" src="https://github.com/user-attachments/assets/f4120851-92a2-45a8-9dfd-dfb391603fa4" />
+<img width="431" height="677" alt="main-panel" src="https://github.com/user-attachments/assets/60874cbd-a23f-4ffa-a152-c439201cffef" />
+<img width="1024" height="1024" alt="logo" src="https://github.com/user-attachments/assets/ad7e5dc6-9556-4e4e-afb5-08c8acc5e5fd" />
 
 <h1 align="center">QDKPv2 — WotLK 3.3.5a (Community Build)</h1>
 
